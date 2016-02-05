@@ -58,8 +58,8 @@ public class BalanceChecker {
         char[] charArray;
         charArray = lines.get(0).toCharArray();
         Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < charArray.length; i++) {
-            switch (charArray[i]) {
+        for (char aCharArray : charArray) {
+            switch (aCharArray) {
                 case '(':
                     stack.push('(');
                     break;
