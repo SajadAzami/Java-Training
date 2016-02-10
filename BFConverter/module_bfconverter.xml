@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_bfconverter" default="compile.module.bfconverter">
+  <dirname property="module.bfconverter.basedir" file="${ant.file.module_bfconverter}"/>
+  
+  <property name="module.jdk.home.bfconverter" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.bfconverter" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.bfconverter" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.bfconverter" value="-encoding UTF-8 -source 1.7 -target 1.7 ${compiler.args}"/>
+  
+  <property name="bfconverter.output.dir" value="${module.bfconverter.basedir}/out/production/BFConverter"/>
+  <property name="bfconverter.testoutput.dir" value="${module.bfconverter.basedir}/out/test/BFConverter"/>
+  
+  <path id="bfconverter.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="bfconverter.module.production.classpath">
+    <path refid="${module.jdk.classpath.bfconverter}"/>
+  </path>
+  
+  <path id="bfconverter.runtime.production.module.classpath">
+    <pathelement location="${bfconverter.output.dir}"/>
+  </path>
+  
+  <path id="bfconverter.module.classpath">
+    <path refid="${module.jdk.classpath.bfconverter}"/>
+    <pathelement location="${bfconverter.output.dir}"/>
+  </path>
+  
+  <path id="bfconverter.runtime.module.classpath">
+    <pathelement location="${bfconverter.testoutput.dir}"/>
+    <pathelement location="${bfconverter.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.bfconverter">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.bfconverter">
+    <patternset refid="excluded.from.module.bfconverter"/>
+  </patternset>
+  
+  <path id="bfconverter.module.sourcepath">
+    <dirset dir="${module.bfconverter.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.bfconverter" depends="compile.module.bfconverter.production,compile.module.bfconverter.tests" description="Compile module BFConverter"/>
+  
+  <target name="compile.module.bfconverter.production" depends="register.custom.compilers" description="Compile module BFConverter; production classes">
+    <mkdir dir="${bfconverter.output.dir}"/>
+    <javac2 destdir="${bfconverter.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.bfconverter}/javac">
+      <compilerarg line="${compiler.args.bfconverter}"/>
+      <bootclasspath refid="bfconverter.module.bootclasspath"/>
+      <classpath refid="bfconverter.module.production.classpath"/>
+      <src refid="bfconverter.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.bfconverter"/>
+    </javac2>
+    
+    <copy todir="${bfconverter.output.dir}">
+      <fileset dir="${module.bfconverter.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.bfconverter.tests" depends="register.custom.compilers,compile.module.bfconverter.production" description="compile module BFConverter; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.bfconverter" description="cleanup module">
+    <delete dir="${bfconverter.output.dir}"/>
+    <delete dir="${bfconverter.testoutput.dir}"/>
+  </target>
+</project>
